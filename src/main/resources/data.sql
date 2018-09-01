@@ -1,0 +1,1 @@
+INSERT INTO account (account_number, pin, balance, overdraft) VALUES (123456789, 1234, 800.00, 200.00)
