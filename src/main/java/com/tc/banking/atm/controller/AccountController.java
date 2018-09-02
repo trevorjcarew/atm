@@ -1,6 +1,8 @@
 package com.tc.banking.atm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +21,15 @@ public class AccountController {
 	private AccountService accountService;
 	
 	@GetMapping("/checkFunds")
-	public AccountCheckResponse checkFunds(@RequestParam Integer pin, @RequestParam Integer accountNumber) {
-		return accountService.retrieveFunds(pin, accountNumber);		
+	public ResponseEntity<AccountCheckResponse> checkFunds(@RequestParam Integer pin, @RequestParam Integer accountNumber) {
+		AccountCheckResponse response = accountService.retrieveFunds(pin, accountNumber);	
+		return new ResponseEntity<AccountCheckResponse>(response, HttpStatus.OK);
 	}
 	
 	@PutMapping("/withdrawFunds")
-	public WithdrawCashResponse withdrawFunds(@RequestParam Integer pin, @RequestParam Integer accountNumber, @RequestParam Double amount) {
-		return accountService.withdrawFunds(pin, accountNumber, amount);
+	public ResponseEntity<WithdrawCashResponse> withdrawFunds(@RequestParam Integer pin, @RequestParam Integer accountNumber, @RequestParam Double amount) {
+		WithdrawCashResponse response =  accountService.withdrawFunds(pin, accountNumber, amount);
+		return new ResponseEntity<WithdrawCashResponse>(response, HttpStatus.OK);
 	}
 
 }

@@ -12,6 +12,7 @@ public class AccountValidation {
 	
 	@Autowired
 	private BankNoteService bankNoteService;
+	
 	@Autowired
 	private AccountRepository accountRepository;
 	
