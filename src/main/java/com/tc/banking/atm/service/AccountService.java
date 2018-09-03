@@ -45,6 +45,7 @@ public class AccountService {
 		double balance = accountEntity.getBalance();
 		double overdraft = accountEntity.getOverdraft();
 
+		//when overdrawn set balance to 0 and update overdraft amount
 		if (amount > balance) {
 			double overdraftReduction = amount - balance;
 			accountEntity.setOverdraft(overdraft - overdraftReduction);
@@ -70,6 +71,7 @@ public class AccountService {
 		
 		response.setNewBalance(newBalance);
 		
+		//remove notes with a quantity of 0 from response
 		for (int i = 0; i < retrievedNotes.size(); i++) {
 			if(retrievedNotes.get(i).getNumberOfNotes() == 0) {
 				retrievedNotes.remove(i);
@@ -81,6 +83,7 @@ public class AccountService {
 	}
 	
 	private void verifyAtmBalance(double requestedAmount) {
+		//get all notes from the db and sum up their total
 		Double atmBalance = bankNoteService.checkAtmBalance();
 		if (requestedAmount > atmBalance) {			
 			throw new AtmException("Unable to dispense this amount");
@@ -88,12 +91,14 @@ public class AccountService {
 	}
 
 	private void validatePin(int pin, int entityPin) {
+		//check if pin provided matches pin in db
 		if (pin != entityPin) {			
 			throw new AtmException("Invalid pin number entered");
 		}
 	}
 
 	private void verifyUserBalance(double amount, double availableFunds) {
+		//check that the have enough funds in their account
 		if (amount > availableFunds) {
 			throw new AtmException("Insufficient funds");
 		}
