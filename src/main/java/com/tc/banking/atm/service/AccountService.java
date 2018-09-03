@@ -71,7 +71,7 @@ public class AccountService {
 	}
 
 	// TODO temporary bugFix: this could be better implemented by not including the
-	// non zero notes in the first place
+	// zero quantity notes in the first place
 	private WithdrawCashResponse formWithdrawelResponse(List<BankNoteResponse> retrievedNotes, double newBalance) {
 		WithdrawCashResponse response = new WithdrawCashResponse();
 
