@@ -12,7 +12,10 @@ import com.tc.banking.atm.repository.BankNoteRepository;
 import com.tc.banking.atm.response.BankNoteResponse;
 import com.tc.banking.atm.util.BankNoteEnum;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class BankNoteService {
 
 	@Autowired
@@ -43,6 +46,7 @@ public class BankNoteService {
 		}
 
 		if (tempAmount != 0.0) {
+			log.error("cannot make up remaining amount with available notes, amount - " + tempAmount);
 			throw new AtmException("Unable to dispense requested amount - Choose amount in different multiples");
 			// TODO work out multiples so that better error can be provided
 		}
