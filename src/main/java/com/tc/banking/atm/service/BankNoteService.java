@@ -39,12 +39,12 @@ public class BankNoteService {
 		//it is reduced until we have balance retrieved or run out of notes
 		tempAmount = amount;
 		for (BankNoteEnum noteEnum : BankNoteEnum.values()) {
-			notesResponse.add(getAmountInNotes(amount, noteEnum));
+			notesResponse.add(getAmountInNotes(noteEnum));
 		}
 
 		if (tempAmount != 0.0) {
-			throw new AtmException("Unable to dispense requested amount");
-			// TODO work out multiples
+			throw new AtmException("Unable to dispense requested amount - Choose amount in different multiples");
+			// TODO work out multiples so that better error can be provided
 		}
 		//only update the notes in the db when we can complete the transaction
 		updateNoteEntities(notesResponse);
@@ -52,7 +52,7 @@ public class BankNoteService {
 		return notesResponse;
 	}
 
-	private BankNoteResponse getAmountInNotes(double amount, BankNoteEnum noteEnum) {
+	private BankNoteResponse getAmountInNotes(BankNoteEnum noteEnum) {
 		BankNoteEntity noteEntity = bankNoteRepository.findByName(noteEnum.getName());
 		BankNoteResponse noteResponse = new BankNoteResponse();
 		noteResponse.setNote(noteEntity.getName());

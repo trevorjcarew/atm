@@ -56,7 +56,7 @@ public class BankNoteServiceTest {
 	@Test (expected = AtmException.class)
 	public void testRetrieveRequestedAmountDoesntHaveSufficientAmoutOfNotes() {
 		setupMockResponses();
-		List<BankNoteResponse> response = bankNoteService.retrieveRequestedAmount(180.0);		
+		bankNoteService.retrieveRequestedAmount(180.0);		
 	}
 	
 	@Test 

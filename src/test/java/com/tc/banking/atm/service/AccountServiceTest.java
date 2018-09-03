@@ -55,13 +55,13 @@ public class AccountServiceTest {
 	@Test (expected = AtmException.class)
 	public void testAccountNotFoundThrowsAtmException() {
 		when(accountRepository.findByAccountNumber(anyInt())).thenReturn(null);		
-		AccountCheckResponse response = accountService.retrieveFunds(PIN, ACCOUNT);
+		accountService.retrieveFunds(PIN, ACCOUNT);
 	}
 	
 	@Test (expected = AtmException.class)
 	public void testIncorrectPinThrowsAtmException() {
 		when(accountRepository.findByAccountNumber(anyInt())).thenReturn(getAccountEntity());		
-		AccountCheckResponse response = accountService.retrieveFunds(0000, ACCOUNT);		
+		accountService.retrieveFunds(0000, ACCOUNT);		
 	}
 	
 	@Test
@@ -84,7 +84,7 @@ public class AccountServiceTest {
 		when(bankNoteService.retrieveRequestedAmount(anyDouble())).thenReturn(getBankNotesList());
 		when(bankNoteService.checkAtmBalance()).thenReturn(200.0);
 		
-		WithdrawCashResponse response = accountService.withdrawFunds(PIN, ACCOUNT, 160.0);		
+		accountService.withdrawFunds(PIN, ACCOUNT, 160.0);		
 	}
 	
 	@Test (expected = AtmException.class)
@@ -93,7 +93,7 @@ public class AccountServiceTest {
 		when(bankNoteService.retrieveRequestedAmount(anyDouble())).thenReturn(getBankNotesList());
 		when(bankNoteService.checkAtmBalance()).thenReturn(50.0);
 		
-		WithdrawCashResponse response = accountService.withdrawFunds(PIN, ACCOUNT, 80.0);		
+		accountService.withdrawFunds(PIN, ACCOUNT, 80.0);		
 	}
 	
 	@Test

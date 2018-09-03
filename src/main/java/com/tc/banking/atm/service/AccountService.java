@@ -37,8 +37,7 @@ public class AccountService {
 		verifyAtmBalance(amount);		
 		List<BankNoteResponse> retrievedNotes = bankNoteService.retrieveRequestedAmount(amount);		
 		double newBalance = updateAccountAndGetBalance(accountEntity, amount);
-		WithdrawCashResponse response = formWithdrawelResponse(retrievedNotes, newBalance);
-		return response;
+		return formWithdrawelResponse(retrievedNotes, newBalance);
 	}
 
 	private double updateAccountAndGetBalance(AccountEntity accountEntity, double amount) {
@@ -86,7 +85,7 @@ public class AccountService {
 		//get all notes from the db and sum up their total
 		Double atmBalance = bankNoteService.checkAtmBalance();
 		if (requestedAmount > atmBalance) {			
-			throw new AtmException("Unable to dispense this amount");
+			throw new AtmException("Unable to dispense this amount - Choose a lower amount");
 		}
 	}
 
