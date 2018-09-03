@@ -12,7 +12,10 @@ import com.tc.banking.atm.response.AccountCheckResponse;
 import com.tc.banking.atm.response.BankNoteResponse;
 import com.tc.banking.atm.response.WithdrawCashResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AccountService {
 
 	@Autowired
@@ -59,7 +62,8 @@ public class AccountService {
 	
 	private AccountEntity retrieveAccount(int accountNumber) {
 		AccountEntity entity = accountRepository.findByAccountNumber(accountNumber);
-		if (entity == null) {			
+		if (entity == null) {
+			log.error("accountNumber not found - ");
 			throw new AtmException("Account does not exist");
 		}
 		return entity;
@@ -84,14 +88,16 @@ public class AccountService {
 	private void verifyAtmBalance(double requestedAmount) {
 		//get all notes from the db and sum up their total
 		Double atmBalance = bankNoteService.checkAtmBalance();
-		if (requestedAmount > atmBalance) {			
+		if (requestedAmount > atmBalance) {
+			log.error("requestedAmout - "  + requestedAmount + ", atmBalanace - " + atmBalance);
 			throw new AtmException("Unable to dispense this amount - Choose a lower amount");
 		}
 	}
 
 	private void validatePin(int pin, int entityPin) {
 		//check if pin provided matches pin in db
-		if (pin != entityPin) {			
+		if (pin != entityPin) {
+			log.error("pin number entered doesn't match account pin");
 			throw new AtmException("Invalid pin number entered");
 		}
 	}
@@ -99,6 +105,7 @@ public class AccountService {
 	private void verifyUserBalance(double amount, double availableFunds) {
 		//check that the have enough funds in their account
 		if (amount > availableFunds) {
+			log.error("requestedAmount - " + amount + ", availableFunds - " + availableFunds);
 			throw new AtmException("Insufficient funds");
 		}
 	}
