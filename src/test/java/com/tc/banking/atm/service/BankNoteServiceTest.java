@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.tc.bank.atm.exception.AtmException;
 import com.tc.banking.atm.entity.BankNoteEntity;
+import com.tc.banking.atm.exception.AtmException;
 import com.tc.banking.atm.repository.BankNoteRepository;
 import com.tc.banking.atm.response.BankNoteResponse;
 import com.tc.banking.atm.util.BankNoteEnum;

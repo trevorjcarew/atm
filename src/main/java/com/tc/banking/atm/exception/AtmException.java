@@ -1,4 +1,4 @@
-package com.tc.bank.atm.exception;
+package com.tc.banking.atm.exception;
 
 public class AtmException extends RuntimeException {	
 	
