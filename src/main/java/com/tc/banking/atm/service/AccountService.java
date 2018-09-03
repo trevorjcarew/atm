@@ -63,7 +63,7 @@ public class AccountService {
 	private AccountEntity retrieveAccount(int accountNumber) {
 		AccountEntity entity = accountRepository.findByAccountNumber(accountNumber);
 		if (entity == null) {
-			log.error("accountNumber not found - ");
+			log.error("accountNumber not found - " + accountNumber);
 			throw new AtmException("Account does not exist");
 		}
 		return entity;
