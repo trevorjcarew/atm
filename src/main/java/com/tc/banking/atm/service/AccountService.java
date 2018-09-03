@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tc.bank.atm.exception.AtmException;
 import com.tc.banking.atm.entity.AccountEntity;
 import com.tc.banking.atm.repository.AccountRepository;
 import com.tc.banking.atm.response.AccountCheckResponse;
 import com.tc.banking.atm.response.BankNoteResponse;
 import com.tc.banking.atm.response.WithdrawCashResponse;
-import com.tc.banking.atm.validation.AccountValidation;
 
 @Service
 public class AccountService {
@@ -19,15 +19,12 @@ public class AccountService {
 	private AccountRepository accountRepository;
 	
 	@Autowired
-	private BankNoteService bankNoteService;
-	
-	@Autowired
-	private AccountValidation accountValidation;
+	private BankNoteService bankNoteService;	
 
 	public AccountCheckResponse retrieveFunds(int pin, int accountNumber) {
 		AccountCheckResponse response = new AccountCheckResponse();
 		AccountEntity entity = retrieveAccount(accountNumber);
-		accountValidation.validatePin(pin, entity.getPin());
+		validatePin(pin, entity.getPin());
 		response.setBalance(entity.getBalance() + "");
 		response.setAvailableFunds(entity.getBalance() + entity.getOverdraft() + "");
 		return response;
@@ -35,9 +32,9 @@ public class AccountService {
 
 	public WithdrawCashResponse withdrawFunds(int pin, int accountNumber, double amount) {		
 		AccountEntity accountEntity = retrieveAccount(accountNumber);		
-		accountValidation.validatePin(pin, accountEntity.getPin());		
-		accountValidation.verifyUserBalance(amount, accountEntity.getBalance() + accountEntity.getOverdraft());		
-		accountValidation.verifyAtmBalance(amount);		
+		validatePin(pin, accountEntity.getPin());		
+		verifyUserBalance(amount, accountEntity.getBalance() + accountEntity.getOverdraft());		
+		verifyAtmBalance(amount);		
 		List<BankNoteResponse> retrievedNotes = bankNoteService.retrieveRequestedAmount(amount);		
 		double newBalance = updateAccountAndGetBalance(accountEntity, amount);
 		WithdrawCashResponse response = formWithdrawelResponse(retrievedNotes, newBalance);
@@ -60,10 +57,10 @@ public class AccountService {
 		return accountEntity.getBalance();
 	}
 	
-	private AccountEntity retrieveAccount(Integer accountNumber) {
+	private AccountEntity retrieveAccount(int accountNumber) {
 		AccountEntity entity = accountRepository.findByAccountNumber(accountNumber);
-		if (entity == null) {
-			// throw invalid account number error
+		if (entity == null) {			
+			throw new AtmException("Account does not exist");
 		}
 		return entity;
 	}
@@ -81,5 +78,24 @@ public class AccountService {
 		response.setNotes(retrievedNotes);
 		
 		return response;
+	}
+	
+	private void verifyAtmBalance(double requestedAmount) {
+		Double atmBalance = bankNoteService.checkAtmBalance();
+		if (requestedAmount > atmBalance) {			
+			throw new AtmException("Unable to dispense this amount");
+		}
+	}
+
+	private void validatePin(int pin, int entityPin) {
+		if (pin != entityPin) {			
+			throw new AtmException("Invalid pin number entered");
+		}
+	}
+
+	private void verifyUserBalance(double amount, double availableFunds) {
+		if (amount > availableFunds) {
+			throw new AtmException("Insufficient funds");
+		}
 	}
 }

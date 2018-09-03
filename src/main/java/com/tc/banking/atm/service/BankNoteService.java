@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tc.bank.atm.exception.AtmException;
 import com.tc.banking.atm.entity.BankNoteEntity;
 import com.tc.banking.atm.repository.BankNoteRepository;
 import com.tc.banking.atm.response.BankNoteResponse;
@@ -38,11 +39,10 @@ public class BankNoteService {
 			notesResponse.add(getAmountInNotes(amount, noteEnum));
 		}
 
-		if (amount != 0.0) {
-			// Throw error that amount can't be dispensed
+		if (tempAmount != 0.0) {
+			throw new AtmException("Unable to dispense requested amount");
+			// TODO work out multiples
 		}
-
-		// Update notes table with updated data
 		updateNoteEntities(notesResponse);
 
 		return notesResponse;
@@ -73,6 +73,5 @@ public class BankNoteService {
 				bankNoteRepository.save(entity);
 			}
 		}
-
 	}
 }
