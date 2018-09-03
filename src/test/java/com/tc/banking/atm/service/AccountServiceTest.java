@@ -71,10 +71,10 @@ public class AccountServiceTest {
 		when(bankNoteService.checkAtmBalance()).thenReturn(200.0);
 		
 		WithdrawCashResponse response = accountService.withdrawFunds(PIN, ACCOUNT, 10.0);
-		assertEquals(response.getNewBalance(), 90.0, 10.0);
-		assertEquals(response.getNotes().size(), 1);
-		assertEquals(response.getNotes().get(0).getNote(), NOTE_NAME);
-		assertEquals(response.getNotes().get(0).getNumberOfNotes(), NUMBER_NOTES);
+		assertEquals( 90.0, response.getNewBalance(), 10.0);
+		assertEquals(1, response.getNotes().size());
+		assertEquals(NOTE_NAME, response.getNotes().get(0).getNote());
+		assertEquals(NUMBER_NOTES, response.getNotes().get(0).getNumberOfNotes());
 		
 	}
 	
@@ -103,14 +103,11 @@ public class AccountServiceTest {
 		when(bankNoteService.checkAtmBalance()).thenReturn(200.0);
 		
 		WithdrawCashResponse response = accountService.withdrawFunds(PIN, ACCOUNT, 120.0);
-		assertEquals(response.getNewBalance(), 0, 100.0);
-		assertEquals(response.getNotes().size(), 1);
-		assertEquals(response.getNotes().get(0).getNote(), NOTE_NAME);
-		assertEquals(response.getNotes().get(0).getNumberOfNotes(), NUMBER_NOTES);
-		
-	}
-	
-	
+		assertEquals(0, response.getNewBalance(), 100.0);
+		assertEquals(1, response.getNotes().size());
+		assertEquals(NOTE_NAME, response.getNotes().get(0).getNote());
+		assertEquals(NUMBER_NOTES, response.getNotes().get(0).getNumberOfNotes());		
+	}	
 
 	private AccountEntity getAccountEntity() {
 		AccountEntity entity = new AccountEntity();

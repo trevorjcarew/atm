@@ -35,22 +35,22 @@ public class BankNoteServiceTest {
 	public void testCheckAtmBalanceReturnsCorrectAmount() {
 		when(bankNoteRepository.findAll()).thenReturn(getBankNoteEntityList());		
 		double atmBalance = bankNoteService.checkAtmBalance();
-		assertEquals(atmBalance, 170.0, 0);
+		assertEquals(170.0, atmBalance, 0);
 	}
 	
 	@Test
 	public void testRetrieveRequestedAmountIsSuccessful() {
 		setupMockResponses();
 		List<BankNoteResponse> response = bankNoteService.retrieveRequestedAmount(85.0);
-		assertEquals(response.size(), 4);
-		assertEquals(response.get(0).getNote(), "Fifty Euro Note");
-		assertEquals(response.get(1).getNote(), "Twenty Euro Note");
-		assertEquals(response.get(2).getNote(), "Ten Euro Note");
-		assertEquals(response.get(3).getNote(), "Five Euro Note");
-		assertEquals(response.get(0).getNumberOfNotes(), 1);
-		assertEquals(response.get(1).getNumberOfNotes(), 1);
-		assertEquals(response.get(2).getNumberOfNotes(), 1);
-		assertEquals(response.get(3).getNumberOfNotes(), 1);		
+		assertEquals(4, response.size());
+		assertEquals("Fifty Euro Note", response.get(0).getNote());
+		assertEquals("Twenty Euro Note", response.get(1).getNote());
+		assertEquals("Ten Euro Note", response.get(2).getNote());
+		assertEquals("Five Euro Note", response.get(3).getNote());
+		assertEquals(1, response.get(0).getNumberOfNotes());
+		assertEquals(1, response.get(1).getNumberOfNotes());
+		assertEquals(1, response.get(2).getNumberOfNotes());
+		assertEquals(1, response.get(3).getNumberOfNotes());		
 	}
 	
 	@Test (expected = AtmException.class)
@@ -63,14 +63,14 @@ public class BankNoteServiceTest {
 	public void testRetrieveRequestedAmountProvidesMinNumberOfNotes() {
 		setupMockResponses();
 		List<BankNoteResponse> response = bankNoteService.retrieveRequestedAmount(70.0);
-		assertEquals(response.get(0).getNote(), "Fifty Euro Note");
-		assertEquals(response.get(1).getNote(), "Twenty Euro Note");
-		assertEquals(response.get(2).getNote(), "Ten Euro Note");
-		assertEquals(response.get(3).getNote(), "Five Euro Note");
-		assertEquals(response.get(0).getNumberOfNotes(), 1);
-		assertEquals(response.get(1).getNumberOfNotes(), 1);
-		assertEquals(response.get(2).getNumberOfNotes(), 0);
-		assertEquals(response.get(3).getNumberOfNotes(), 0);
+		assertEquals("Fifty Euro Note", response.get(0).getNote());
+		assertEquals("Twenty Euro Note", response.get(1).getNote());
+		assertEquals("Ten Euro Note", response.get(2).getNote());
+		assertEquals("Five Euro Note", response.get(3).getNote());
+		assertEquals(1, response.get(0).getNumberOfNotes());
+		assertEquals(1, response.get(1).getNumberOfNotes());
+		assertEquals(0, response.get(2).getNumberOfNotes());
+		assertEquals(0, response.get(3).getNumberOfNotes());
 	}
 	
 	private void setupMockResponses() {

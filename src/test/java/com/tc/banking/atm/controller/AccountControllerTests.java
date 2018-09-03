@@ -64,8 +64,6 @@ public class AccountControllerTests {
         		.contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(jsonPath("newBalance", is(22.0)))
-        //TODO Fix this part of the test
-//        .andExpect(jsonPath("note", is("note")))
         .andExpect(status().isOk());
         	
     }
